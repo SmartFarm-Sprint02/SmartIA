@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BobIA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="navbar-smartia">
+        <div id="navbar-icon">
+            <img src="img/icon user.png" alt="">
+        </div>
+        <span>SmartIA</span>
+    </div>
+
+    <section id="container">
+        <div class="card-buttons">
+            <button onclick="problemaSensor()">Problema no sensor</button>
+            <button onclick="ausenciaGraficosDashboard()">Ausência de gráficos na dashboard</button>
+            <button onclick="dadosDesatualizadosDashboard()">Dados desatualizados na dashboard</button>
+        </div>
+
+        <div class="container-resposta" id="chat" style="display: none;">
+            <div class="chatPergunta">
+                <p id="replicarPergunta"></p>
+            </div>
+
+            <div class="chatResposta">
+                <div id="resposta"></div>
+            </div>
+        </div>
+
+        <div class="container-resposta" id="containerRespostaTexto">
+            <span>Faça sua pergunta técnica ao SmartIA. Você pode selecionar as perguntas
+                mais frequentes dos botões acima ou algo mais específico digitando-o logo abaixo.
+            </span>
+        </div>
+
+        <input id="pergunta" type="text" placeholder="Perguntar algo específico"></input>
+        <br>
+        <button onclick="gerarResposta()" id="button-gerarResposta">Perguntar</button>
+
+    </section>
+
+    <script>
+
+        async function gerarResposta() {
+
+            const pergunta = document.getElementById('pergunta').value;
+
+            if (pergunta.trim() == false) {
+                alert("Por favor, digite uma pergunta ou selecione um dos botões de perguntas mais frequentes")
+            }
+
+            const response = await fetch('/perguntar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ pergunta })
+            });
+
+            const data = await response.json();
+
+            containerRespostaTexto.style.display = 'none';
+            chat.style.display = 'block';
+
+            document.getElementById('resposta').innerText = data.resultado;
+            replicarPergunta.innerText = pergunta;
+        }
+
+        async function problemaSensor() {
+            const pergunta = `Meus sensores DTH11 e LDR não estão funcionando,
+             o que pode ser e o que posso fazer para tentar concertar?`;
+
+            const response = await fetch('/perguntar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ pergunta })
+            });
+
+            const data = await response.json();
+
+            containerRespostaTexto.style.display = 'none';
+            chat.style.display = 'block';
+
+            document.getElementById('resposta').innerText = data.resultado;
+            replicarPergunta.innerText = "Problema no sensor";
+        }
+
+        async function ausenciaGraficosDashboard() {
+            const pergunta = `Os gráficos da dashboard que puxa dados do banco de dados através de uma api node.js 
+            não estão aparecendo. O que devo fazer?`;
+
+            const response = await fetch('/perguntar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ pergunta })
+            });
+
+            const data = await response.json();
+
+            containerRespostaTexto.style.display = 'none';
+            chat.style.display = 'block';
+
+            document.getElementById('resposta').innerText = data.resultado;
+            replicarPergunta.innerText = "Ausência de dados na dashboard";
+        }
+
+        async function dadosDesatualizadosDashboard() {
+            const pergunta = `Os dados exibidos na dashboard (gráficos e kpis) que puxa dados do banco de dados 
+            das leituras dos sensores dth11 e ldr, através de uma api node.js estão desatualizados. O que devo fazer?`;
+
+            const response = await fetch('/perguntar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ pergunta })
+            });
+
+            const data = await response.json();
+
+            containerRespostaTexto.style.display = 'none';
+            chat.style.display = 'block';
+
+            document.getElementById('resposta').innerText = data.resultado;
+            replicarPergunta.innerText = "Dados desatualizados na dashboard";
+        }
+
+    </script>
+
+</body>
+
+</html>
